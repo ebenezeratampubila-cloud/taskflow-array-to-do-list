@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TaskFlow — To-Do List Using Arrays</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#64748b;--line:#e4eaf2;--primary:#4f46e5;--primary2:#4338ca;--green:#16845b;--red:#d14343;--shadow:0 16px 45px rgba(29,45,75,.09)}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#eef2ff 0%,#f8fafc 48%,#ecfeff 100%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh}
+.wrap{max-width:1040px;margin:auto;padding:36px 20px 52px}.hero{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:26px}.eyebrow{font-size:.75rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--primary);margin:0 0 10px}.hero h1{font-size:clamp(2rem,5vw,3.25rem);letter-spacing:-.055em;line-height:1.05;margin:0 0 12px}.hero p{color:var(--muted);line-height:1.65;max-width:630px;margin:0}.pill{white-space:nowrap;border:1px solid #c7d2fe;background:#eef2ff;color:#3730a3;padding:9px 13px;border-radius:999px;font-size:.82rem;font-weight:750}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}.stat,.panel{background:var(--card);border:1px solid rgba(226,232,240,.9);border-radius:20px;box-shadow:var(--shadow)}.stat{padding:18px 20px}.stat span{display:block;color:var(--muted);font-size:.84rem;margin-bottom:8px}.stat strong{font-size:1.8rem;letter-spacing:-.04em}.layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px;align-items:start}.panel{padding:22px}.panel h2{font-size:1.1rem;margin:0 0 5px;letter-spacing:-.02em}.sub{font-size:.88rem;color:var(--muted);margin:0 0 18px;line-height:1.5}
+label{display:block;font-size:.82rem;font-weight:750;margin:0 0 7px;color:#334155}input,select,textarea{font:inherit;width:100%;border:1px solid #d8e0ec;border-radius:11px;padding:12px 13px;background:#fff;color:var(--ink);outline:none}input:focus,select:focus,textarea:focus{border-color:#818cf8;box-shadow:0 0 0 3px #e0e7ff}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{margin-bottom:14px}.full{grid-column:1/-1}.primary{border:0;background:var(--primary);color:#fff;border-radius:11px;padding:12px 16px;font:inherit;font-weight:800;cursor:pointer;transition:.15s}.primary:hover{background:var(--primary2);transform:translateY(-1px)}.filters{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 14px}.filter{border:1px solid var(--line);background:#fff;color:#475569;padding:8px 12px;border-radius:999px;font-weight:750;cursor:pointer;font-size:.82rem}.filter.active{background:#eef2ff;border-color:#c7d2fe;color:#3730a3}.task-list{display:grid;gap:10px}.task{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}.task.done{background:#f8fafc}.task.done .task-title{text-decoration:line-through;color:#94a3b8}.check{width:20px;height:20px;accent-color:var(--green);margin:2px 0 0;flex:0 0 auto}.task-main{min-width:0;flex:1}.task-title{font-weight:800;overflow-wrap:anywhere}.task-note{font-size:.85rem;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}.meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}.tag{font-size:.72rem;font-weight:800;padding:4px 8px;border-radius:999px;background:#f1f5f9;color:#475569}.tag.High{background:#fee2e2;color:#991b1b}.tag.Medium{background:#fef3c7;color:#92400e}.tag.Low{background:#dcfce7;color:#166534}.delete{border:0;background:#fff1f2;color:var(--red);border-radius:9px;padding:7px 9px;font-weight:800;cursor:pointer}.empty{text-align:center;padding:30px 14px;color:var(--muted);border:1px dashed #cbd5e1;border-radius:14px}.empty b{display:block;color:#334155;margin-bottom:5px}.info{margin-top:18px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:15px;padding:16px}.info h3{font-size:.95rem;margin:0 0 8px;color:#312e81}.info p,.info li{font-size:.84rem;line-height:1.55;color:#3730a3}.info p{margin:0}.info ul{padding-left:19px;margin:8px 0 0}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#e0e7ff;border-radius:5px;padding:2px 5px}.foot{text-align:center;color:var(--muted);font-size:.8rem;margin-top:24px}.notice{font-size:.8rem;color:var(--muted);margin-top:10px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.hero{display:block}.pill{display:inline-block;margin-top:15px}.stats{gap:9px}.stat{padding:14px}.stat strong{font-size:1.45rem}.wrap{padding:25px 14px 38px}}
+@media(max-width:420px){.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <div><p class="eyebrow">Data Structures · Real-world application</p><h1>Make space for<br>what matters.</h1><p>TaskFlow is a simple to-do list that organises everyday work. Its task collection is stored in a JavaScript array, making it easy to add, find, update and remove tasks.</p></div>
+    <div class="pill">Built with JavaScript arrays</div>
+  </header>
+  <section class="stats" aria-label="Task summary">
+    <div class="stat"><span>Total tasks</span><strong id="totalCount">0</strong></div>
+    <div class="stat"><span>Completed</span><strong id="doneCount">0</strong></div>
+    <div class="stat"><span>Still to do</span><strong id="todoCount">0</strong></div>
+  </section>
+  <div class="layout">
+    <section class="panel">
+      <h2>Your tasks</h2><p class="sub">Add a task, track its priority, and tick it off when finished.</p>
+      <form id="taskForm">
+        <div class="formgrid">
+          <div class="field full"><label for="taskTitle">Task name *</label><input id="taskTitle" maxlength="100" placeholder="e.g. Complete data structures assignment" required></div>
+          <div class="field"><label for="taskDue">Due date</label><input id="taskDue" type="date"></div>
+          <div class="field"><label for="taskPriority">Priority</label><select id="taskPriority"><option>Medium</option><option>High</option><option>Low</option></select></div>
+          <div class="field full"><label for="taskNote">Notes (optional)</label><input id="taskNote" maxlength="180" placeholder="Any details to remember?"></div>
+          <div class="full"><button class="primary" type="submit">＋ Add task</button></div>
+        </div>
+      </form>
+      <div class="filters" aria-label="Filter tasks">
+        <button class="filter active" type="button" data-filter="all">All tasks</button>
+        <button class="filter" type="button" data-filter="todo">To do</button>
+        <button class="filter" type="button" data-filter="done">Completed</button>
+      </div>
+      <div id="taskList" class="task-list" aria-live="polite"></div>
+      <p class="notice">Your tasks are saved in this browser on this device.</p>
+    </section>
+    <aside>
+      <section class="panel">
+        <h2>Why use an array?</h2><p class="sub">An array stores multiple task records in one ordered collection.</p>
+        <div class="info"><h3>The array behind this app</h3><p><span class="code">let tasks = [];</span></p><ul><li><b>ADD:</b> <span class="code">tasks.push(task)</span></li><li><b>DISPLAY:</b> loop through the array</li><li><b>UPDATE:</b> change a task's completed value</li><li><b>DELETE:</b> remove a task with <span class="code">splice()</span></li><li><b>FILTER:</b> select tasks by completion status</li></ul></div>
+      </section>
+      <section class="panel" style="margin-top:18px">
+        <h2>Other real-world uses</h2><p class="sub">Arrays are useful wherever a program manages ordered collections.</p>
+        <ul style="padding-left:20px;margin:0;color:#475569;line-height:1.8;font-size:.9rem"><li>Student marks and class lists</li><li>Shopping cart items</li><li>Music playlists</li><li>Daily weather readings</li><li>Inventory/product lists</li></ul>
+      </section>
+    </aside>
+  </div>
+  <footer class="foot">TaskFlow · To-Do List Application Using Arrays · Student project</footer>
+</main>
+<script>
+/*
+  MAIN DATA STRUCTURE: ARRAY
+  Each task is an object stored as an element inside the tasks array.
+*/
+const STORAGE_KEY = "taskflow_array_project_v1";
+let tasks = loadTasks();                 // Array containing every task
+let currentFilter = "all";
+
+function loadTasks() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : null;
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+function saveTasks() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+function addTask(title, dueDate, priority, note) {
+  const task = {
+    id: Date.now() + Math.random(),
+    title: title,
+    dueDate: dueDate,
+    priority: priority,
+    note: note,
+    completed: false
+  };
+  tasks.push(task);                       // Add an element to the array
+  saveTasks();
+  renderTasks();
+}
+function toggleTask(id) {
+  const index = tasks.findIndex(task => task.id === id); // Search array
+  if (index !== -1) {
+    tasks[index].completed = !tasks[index].completed;    // Update element
+    saveTasks();
+    renderTasks();
+  }
+}
+function deleteTask(id) {
+  const index = tasks.findIndex(task => task.id === id);
+  if (index !== -1) {
+    tasks.splice(index, 1);              // Remove element from the array
+    saveTasks();
+    renderTasks();
+  }
+}
+function renderTasks() {
+  const list = document.getElementById("taskList");
+  const visibleTasks = tasks.filter(task => {
+    if (currentFilter === "todo") return !task.completed;
+    if (currentFilter === "done") return task.completed;
+    return true;
+  });                                    // filter() creates a displayed subset
+  document.getElementById("totalCount").textContent = tasks.length;
+  document.getElementById("doneCount").textContent = tasks.filter(t => t.completed).length;
+  document.getElementById("todoCount").textContent = tasks.filter(t => !t.completed).length;
+  list.replaceChildren();
+  if (visibleTasks.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.innerHTML = "<b>No tasks here yet</b>Add a task above to get started.";
+    list.appendChild(empty);
+    return;
+  }
+  visibleTasks.forEach(task => {
+    const article = document.createElement("article");
+    article.className = "task" + (task.completed ? " done" : "");
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.className = "check";
+    check.checked = task.completed;
+    check.setAttribute("aria-label", "Mark " + task.title + " as completed");
+    check.addEventListener("change", () => toggleTask(task.id));
+    const main = document.createElement("div");
+    main.className = "task-main";
+    const title = document.createElement("div");
+    title.className = "task-title";
+    title.textContent = task.title;
+    main.appendChild(title);
+    if (task.note) {
+      const note = document.createElement("div");
+      note.className = "task-note";
+      note.textContent = task.note;
+      main.appendChild(note);
+    }
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    const priority = document.createElement("span");
+    priority.className = "tag " + task.priority;
+    priority.textContent = task.priority + " priority";
+    meta.appendChild(priority);
+    if (task.dueDate) {
+      const due = document.createElement("span");
+      due.className = "tag";
+      due.textContent = "Due " + task.dueDate;
+      meta.appendChild(due);
+    }
+    meta.appendChild(Object.assign(document.createElement("span"), {
+      className: "tag", textContent: task.completed ? "Completed" : "Pending"
+    }));
+    main.appendChild(meta);
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "delete";
+    del.textContent = "Delete";
+    del.setAttribute("aria-label", "Delete " + task.title);
+    del.addEventListener("click", () => deleteTask(task.id));
+    article.append(check, main, del);
+    list.appendChild(article);
+  });
+}
+document.getElementById("taskForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const title = document.getElementById("taskTitle").value.trim();
+  if (!title) return;
+  addTask(title, document.getElementById("taskDue").value,
+    document.getElementById("taskPriority").value,
+    document.getElementById("taskNote").value.trim());
+  event.target.reset();
+  document.getElementById("taskPriority").value = "Medium";
+  document.getElementById("taskTitle").focus();
+});
+document.querySelectorAll("[data-filter]").forEach(button => {
+  button.addEventListener("click", () => {
+    currentFilter = button.dataset.filter;
+    document.querySelectorAll("[data-filter]").forEach(b => b.classList.toggle("active", b === button));
+    renderTasks();
+  });
+});
+renderTasks();
+</script>
+</body>
+</html>
